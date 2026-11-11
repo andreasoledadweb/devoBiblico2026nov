@@ -1,211 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Devocional Bíblico</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devocional Bíblico</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="contenedor-principal">
-    
-    <!-- Encabezado con actualización y modo oscuro -->
-    <div class="header-superior">
-      <span class="badge-actualizacion">Actualizado noviembre 2026</span>
-      <button class="btn-modo-toggle" onclick="toggleModoOscuro()" title="Modo Nocturno/Diurno">
-        <span id="icono-modo">🌙</span>
-      </button>
-    </div>
-
-    <h1 class="titulo-pagina">Devocional Bíblico</h1>
-
-    <!-- Menú de Navegación Principal -->
-    <div class="menu-botones-principal">
-      <button class="btn-menu active" onclick="mostrarSeccion('seccion-agregar')">Agregar</button>
-      <button class="btn-menu" onclick="mostrarSeccion('seccion-guardados')">Versículos Guardados</button>
-      <button class="btn-menu" onclick="mostrarSeccion('seccion-practicar')">Practicar</button>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- SECCIÓN 1: AGREGAR                         -->
-    <!-- ========================================== -->
-    <div id="seccion-agregar" class="seccion-contenido">
-      <h2>Agregar Versículo / Devocional</h2>
-      <form id="form-agregar" onsubmit="event.preventDefault();">
-        <div class="campo">
-          <label for="add-estado-animo">Estado de ánimo:</label>
-          <select id="add-estado-animo">
-            <option value="">-- Cargando opciones --</option>
-          </select>
+    <div class="contenedor-principal">
+        
+        <!-- Encabezado -->
+        <div class="header-superior">
+            <span class="badge-actualizacion">Actualizado noviembre 2026 🌙</span>
+            <button class="btn-modo-toggle" onclick="toggleModoOscuro()">
+                <span id="icono-modo">🌙</span>
+            </button>
         </div>
 
-        <div class="campo">
-          <label for="add-fuente">Fuente (ej. Juan 3:16):</label>
-          <input type="text" id="add-fuente" placeholder="Escribe la cita bíblica...">
+        <h1 class="titulo-pagina">Devocional Bíblico</h1>
+
+        <!-- Sección de Filtro con la opción de Ver Todos -->
+        <div class="seccion-filtro">
+            <label for="filtro-estado">Filtrar Versículos / Devocionales:</label>
+            <select id="filtro-estado" onchange="filtrarRegistros()">
+                <option value="todos">🌐 Ver todas las fuentes guardadas</option>
+                <!-- Las opciones de estado de ánimo se cargarán aquí automáticamente -->
+            </select>
         </div>
 
-        <div class="campo">
-          <label for="add-contenido">Contenido:</label>
-          <textarea id="add-contenido" rows="5" placeholder="Escribe el texto o reflexión..."></textarea>
+        <!-- Contenedor donde se mostrarán los resultados -->
+        <div id="resultado-busqueda" class="contenedor-resultados">
+            <!-- Aquí aparecerán los versículos cargados dinámicamente -->
         </div>
-
-        <div class="centrar-btn">
-          <button type="button" class="btn-principal" onclick="generarVistaPreviaAgregar()">Vista Previa</button>
-        </div>
-
-        <!-- Recuadro de Vista Previa -->
-        <div id="vista-previa-container" class="oculto recuadro-card">
-          <h3>Vista Previa</h3>
-          <p><strong>Estado de Ánimo:</strong> <span id="pv-animo"></span></p>
-          <p><strong>Fuente:</strong> <span id="pv-fuente"></span></p>
-          <p><strong>Contenido:</strong></p>
-          <div id="pv-contenido" class="caja-texto-preview"></div>
-
-          <div class="botones-accion">
-            <button type="button" class="btn-secundario" onclick="limpiarFormAgregar()">Limpiar todo</button>
-            <button type="button" class="btn-secundario" onclick="modificarAgregar()">Modificar</button>
-            <button type="button" class="btn-principal" onclick="guardarEnSheetsAgregar()">Agregar a Sheets</button>
-          </div>
-          <p id="msg-agregar" class="mensaje-estado"></p>
-        </div>
-      </form>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- SECCIÓN 2: VERSÍCULOS GUARDADOS             -->
-    <!-- ========================================== -->
-    <div id="seccion-guardados" class="seccion-contenido oculto">
-      <h2>Practicar Guardados</h2>
-      <form id="form-guardados" onsubmit="event.preventDefault();">
-        <div class="campo">
-          <label for="guard-estado-animo">Estado de ánimo:</label>
-          <select id="guard-estado-animo" onchange="filtrarFuentesGuardadas()">
-            <option value="">-- Selecciona --</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="guard-fuente">Fuente:</label>
-          <select id="guard-fuente">
-            <option value="">-- Selecciona Estado de Ánimo Primero --</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="guard-practica-input">Intenta escribir el contenido:</label>
-          <textarea id="guard-practica-input" rows="4" placeholder="Escribe de memoria lo que recuerdes..."></textarea>
-        </div>
-
-        <div class="botones-accion">
-          <button type="button" class="btn-secundario" onclick="limpiarGuardados()">Limpiar todo</button>
-          <button type="button" class="btn-principal" onclick="probarConocimientoGuardados()">Probar conocimiento</button>
-        </div>
-
-        <!-- Revelar respuesta original -->
-        <div id="revelado-guardados-container" class="oculto recuadro-card margin-top">
-          <h3>Contenido Real (Sheets):</h3>
-          <textarea id="guard-contenido-real" rows="5" readonly class="textarea-readonly"></textarea>
-
-          <div class="toggle-container">
-            <span>¿Versículo aprendido?</span>
-            <label class="switch">
-              <input type="checkbox" id="switch-aprendido">
-              <span class="slider round"></span>
-            </label>
-            <span id="label-switch">NO</span>
-          </div>
-
-          <div class="centrar-btn margin-top">
-            <button type="button" class="btn-principal" onclick="guardarMemorizado()">Guardar información en Sheets</button>
-          </div>
-          <p id="msg-guardados" class="mensaje-estado"></p>
-        </div>
-      </form>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- SECCIÓN 3: PRACTICAR                       -->
-    <!-- ========================================== -->
-    <div id="seccion-practicar" class="seccion-contenido oculto">
-      <h2>Modalidad de Práctica</h2>
-      
-      <!-- Submenú de práctica -->
-      <div class="sub-menu">
-        <button class="btn-sub-menu active" onclick="mostrarSubPractica('sub-orden-biblia')">Opción 1: Orden de la Biblia</button>
-        <button class="btn-sub-menu" onclick="mostrarSubPractica('sub-aprendidos')">Opción 2: Versículos Aprendidos</button>
-      </div>
-
-      <!-- SUB-OPCIÓN 1: ORDEN DE LA BIBLIA -->
-      <div id="sub-orden-biblia" class="sub-practica-contenido">
-        <div class="campo">
-          <label for="testamento-select">Testamento:</label>
-          <select id="testamento-select" onchange="cargarGruposBiblia()">
-            <option value="">-- Selecciona --</option>
-            <option value="Antiguo Testamento">Antiguo Testamento</option>
-            <option value="Nuevo Testamento">Nuevo Testamento</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="grupo-select">Grupo:</label>
-          <select id="grupo-select">
-            <option value="">-- Selecciona Testamento Primero --</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="orden-practica-input">Tu respuesta / práctica:</label>
-          <textarea id="orden-practica-input" rows="4" placeholder="Escribe aquí los libros o pasajes del grupo..."></textarea>
-        </div>
-
-        <div class="botones-accion">
-          <button type="button" class="btn-secundario" onclick="limpiarOrdenBiblia()">Limpiar todo</button>
-          <button type="button" class="btn-principal" onclick="probarConocimientoOrden()">Probar conocimiento</button>
-        </div>
-
-        <div id="revelado-orden-container" class="oculto recuadro-card margin-top">
-          <h3>Contenido del Grupo:</h3>
-          <textarea id="orden-contenido-real" rows="5" readonly class="textarea-readonly"></textarea>
-        </div>
-      </div>
-
-      <!-- SUB-OPCIÓN 2: VERSÍCULOS APRENDIDOS -->
-      <div id="sub-aprendidos" class="sub-practica-contenido oculto">
-        <div class="campo">
-          <label for="mem-estado-animo">Estado de ánimo:</label>
-          <select id="mem-estado-animo" onchange="filtrarFuentesMemorizadas()">
-            <option value="">-- Selecciona --</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="mem-fuente">Fuente:</label>
-          <select id="mem-fuente">
-            <option value="">-- Selecciona Estado de Ánimo Primero --</option>
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="mem-practica-input">Intenta escribir el contenido:</label>
-          <textarea id="mem-practica-input" rows="4" placeholder="Recuerda el contenido..."></textarea>
-        </div>
-
-        <div class="botones-accion">
-          <button type="button" class="btn-secundario" onclick="limpiarMemorizados()">Limpiar todo</button>
-          <button type="button" class="btn-principal" onclick="probarConocimientoMemorizados()">Probar conocimiento</button>
-        </div>
-
-        <div id="revelado-mem-container" class="oculto recuadro-card margin-top">
-          <h3>Contenido Aprendido (Hoja Memorizado):</h3>
-          <textarea id="mem-contenido-real" rows="5" readonly class="textarea-readonly"></textarea>
-        </div>
-      </div>
 
     </div>
 
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
