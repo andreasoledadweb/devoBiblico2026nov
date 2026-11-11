@@ -1,5 +1,5 @@
 // Coloca la URL de tu Aplicación Web de Apps Script aquí
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeQ12vhnyyQNxz6nGE6_bO-UmNRwHYhbHL5TQvgXAhBpmFlK4xL_J9G2QRAtA9mIqGkg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgpwqq_Qqw9HadbqGMkNM5KDEG4xEbWNlIzTPpH5Wyn8HTUTIkKnOxiSieVp55PqnKyg/exec";
 
 let datosGlobales = {
   estadosAnimo: [],
