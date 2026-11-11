@@ -10,7 +10,6 @@
 
     <div class="contenedor-principal">
         
-        <!-- Encabezado -->
         <div class="header-superior">
             <span class="badge-actualizacion">Actualizado noviembre 2026 🌙</span>
             <button class="btn-modo-toggle" onclick="toggleModoOscuro()">
@@ -20,19 +19,17 @@
 
         <h1 class="titulo-pagina">Devocional Bíblico</h1>
 
-        <!-- Sección de Filtro con la opción de Ver Todos -->
-        <div class="seccion-filtro">
-            <label for="filtro-estado">Filtrar Versículos / Devocionales:</label>
-            <select id="filtro-estado" onchange="filtrarRegistros()">
-                <option value="todos">🌐 Ver todas las fuentes guardadas</option>
-                <!-- Las opciones de estado de ánimo se cargarán aquí automáticamente -->
+        <!-- Tu menú desplegable original con la opción de Ver Todo agregada arriba -->
+        <div class="seccion-selector">
+            <label for="filtro-estado">Estado de ánimo:</label>
+            <select id="filtro-estado" onchange="seleccionarFiltro()">
+                <option value="todos">-- Ver todas las fuentes / Todo --</option>
+                <!-- Las opciones de Sheets se cargan aquí abajo automáticamente -->
             </select>
         </div>
 
-        <!-- Contenedor donde se mostrarán los resultados -->
-        <div id="resultado-busqueda" class="contenedor-resultados">
-            <!-- Aquí aparecerán los versículos cargados dinámicamente -->
-        </div>
+        <!-- Contenedor donde se despliegan tus datos -->
+        <div id="contenedor-datos"></div>
 
     </div>
 
